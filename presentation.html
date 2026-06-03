@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Warehouse Management System - Executive Presentation</title>
+  <!-- Google Fonts: Outfit and Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --------------------------------------------------
+       DESIGN SYSTEM & VARIABLES
+       -------------------------------------------------- */
+    :root {
+      --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      
+      --color-dark-bg: #070B13;
+      --color-dark-card: #0F172A;
+      --color-light-bg: #F8FAFC;
+      --color-light-card: rgba(255, 255, 255, 0.85);
+      --color-border: #E2E8F0;
+      
+      --color-text-primary-light: #0F172A;
+      --color-text-secondary-light: #475569;
+      --color-text-primary-dark: #F8FAFC;
+      --color-text-secondary-dark: #94A3B8;
+      
+      --color-purple: #AA3BFF;
+      --color-purple-glow: rgba(170, 59, 255, 0.15);
+      --color-blue: #3B82F6;
+      --color-blue-glow: rgba(59, 130, 246, 0.15);
+      --color-green: #10B981;
+      --color-red: #EF4444;
+      --color-orange: #F59E0B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-light-bg);
+      color: var(--color-text-primary-light);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* --------------------------------------------------
+       PRESENTATION CONTAINER & SLIDES
+       -------------------------------------------------- */
+    .presentation-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 4% 5% 5% 5%;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.98) translateY(10px);
+      transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
+                  transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 1;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+      z-index: 2;
+    }
+
+    /* --------------------------------------------------
+       SLIDE THEMES
+       -------------------------------------------------- */
+    .slide-dark {
+      background-color: var(--color-dark-bg);
+      color: var(--color-text-primary-dark);
+    }
+
+    .slide-light {
+      background-color: var(--color-light-bg);
+      color: var(--color-text-primary-light);
+    }
+
+    /* Decorative Left Glow Bar on Dark Slides */
+    .slide-dark::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--color-purple), var(--color-blue));
+    }
+
+    /* --------------------------------------------------
+       SLIDE HEADER & DIVISION LINES
+       -------------------------------------------------- */
+    .slide-header {
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .slide-title {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .slide-light .slide-title {
+      color: var(--color-text-primary-light);
+    }
+
+    .slide-dark .slide-title {
+      background: linear-gradient(135deg, #FFFFFF 60%, var(--color-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-divider {
+      height: 3px;
+      width: 100%;
+      background: linear-gradient(to right, var(--color-purple), var(--color-blue), transparent);
+      border-radius: 2px;
+    }
+
+    /* --------------------------------------------------
+       SLIDE CONTENT LAYOUTS
+       -------------------------------------------------- */
+    .slide-content {
+      flex-grow: 1;
+      display: flex;
+      gap: 24px;
+      min-height: 0; /* Important for flex child scrolling */
+      align-items: stretch;
+    }
+
+    /* Columns */
+    .col-6 {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    .col-3 {
+      width: 25%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    /* Grid Layouts */
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .grid-3-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* --------------------------------------------------
+       BENTO CARDS (Glassmorphic containers)
+       -------------------------------------------------- */
+    .bento-card {
+      background-color: var(--color-light-card);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-dark .bento-card {
+      background-color: rgba(15, 23, 42, 0.6);
+      border-color: rgba(51, 65, 85, 0.5);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 20px -8px rgba(170, 59, 255, 0.2);
+      border-color: rgba(170, 59, 255, 0.4);
+    }
+
+    .bento-card-title {
+      font-family: var(--font-title);
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-purple .bento-card-title { color: var(--color-purple); }
+    .card-blue .bento-card-title { color: var(--color-blue); }
+    .card-green .bento-card-title { color: var(--color-green); }
+    .card-red .bento-card-title { color: var(--color-red); }
+    .card-orange .bento-card-title { color: var(--color-orange); }
+
+    /* Bullet List styling inside bento cards */
+    .bento-list {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.925rem;
+      line-height: 1.5;
+    }
+
+    .slide-light .bento-list {
+      color: var(--color-text-secondary-light);
+    }
+
+    .slide-dark .bento-list {
+      color: var(--color-text-secondary-dark);
+    }
+
+    .bento-list li {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .bento-list li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 10px;
+    }
+
+    .card-purple .bento-list li::before { color: var(--color-purple); }
+    .card-blue .bento-list li::before { color: var(--color-blue); }
+    .card-green .bento-list li::before { color: var(--color-green); }
+    .card-red .bento-list li::before { color: var(--color-red); }
+    .card-orange .bento-list li::before { color: var(--color-orange); }
+
+    .bento-list li strong {
+      color: var(--color-text-primary-light);
+    }
+
+    .slide-dark .bento-list li strong {
+      color: var(--color-text-primary-dark);
+    }
+
+    /* --------------------------------------------------
+       IMAGE CARDS
+       -------------------------------------------------- */
+    .image-card {
+      flex-grow: 1;
+      border-radius: 16px;
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      background-color: #0F172A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide-dark .image-card {
+      border-color: rgba(51, 65, 85, 0.5);
+    }
+
+    .image-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .image-card:hover img {
+      transform: scale(1.03);
+    }
+
+    .image-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background-color: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+
+    /* --------------------------------------------------
+       SPECIFIC SLIDE STYLES (Title, Schema Table)
+       -------------------------------------------------- */
+    /* Title Slide (Slide 1) */
+    .title-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding-left: 2%;
+    }
+
+    .title-large {
+      font-family: var(--font-title);
+      font-size: 4.8rem;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #0F172A 30%, #5B21B6 70%, var(--color-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 10px rgba(170, 59, 255, 0.15));
+    }
+
+    .title-subtitle {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--color-purple);
+      margin-bottom: 60px;
+      max-width: 800px;
+      line-height: 1.4;
+    }
+
+    .title-meta {
+      display: flex;
+      gap: 40px;
+      font-size: 0.8rem;
+      color: var(--color-text-secondary-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .title-meta-item strong {
+      display: block;
+      color: var(--color-text-primary-light);
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    /* Section Divider Slides */
+    .divider-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding-left: 5%;
+    }
+
+    .divider-accent {
+      width: 80px;
+      height: 6px;
+      background: var(--color-purple);
+      border-radius: 3px;
+      margin-bottom: 24px;
+    }
+
+    .divider-large {
+      font-family: var(--font-title);
+      font-size: 3.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      margin-bottom: 12px;
+    }
+
+    .divider-sub {
+      font-size: 1.4rem;
+      color: var(--color-text-secondary-dark);
+    }
+
+    /* Database Schema Table (Slide 5) */
+    .schema-table-container {
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-light-card);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    }
+
+    .schema-table {
+      width: 100%;
+      height: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+
+    .schema-table th {
+      background-color: var(--color-dark-bg);
+      color: #FFFFFF;
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 14px 18px;
+      text-transform: uppercase;
+    }
+
+    .schema-table td {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text-primary-light);
+    }
+
+    .schema-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .schema-table tr:nth-child(even) td {
+      background-color: rgba(248, 250, 252, 0.8);
+    }
+
+    .schema-table tr:hover td {
+      background-color: rgba(170, 59, 255, 0.04);
+    }
+
+    .schema-table td strong {
+      color: var(--color-text-primary-light);
+      font-size: 0.9rem;
+    }
+
+    .schema-table .badge-pk {
+      background-color: rgba(170, 59, 255, 0.1);
+      color: var(--color-purple);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      border: 1px solid rgba(170, 59, 255, 0.25);
+    }
+
+    /* Split columns on Slide 10 */
+    .road-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      height: 100%;
+      padding-top: 20px;
+    }
+
+    .road-header {
+      font-family: var(--font-title);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid;
+    }
+
+    .road-header-purple {
+      color: var(--color-purple);
+      border-color: var(--color-purple);
+    }
+
+    .road-header-blue {
+      color: var(--color-blue);
+      border-color: var(--color-blue);
+    }
+
+    .road-list {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .road-list li {
+      position: relative;
+      padding-left: 24px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--color-text-secondary-light);
+    }
+
+    .road-list li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 12px;
+    }
+
+    .road-list-purple li::before { color: var(--color-purple); }
+    .road-list-blue li::before { color: var(--color-blue); }
+
+    .road-list li strong {
+      color: var(--color-text-primary-light);
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+
+    /* --------------------------------------------------
+       NAVIGATION CONTROLS & HUD
+       -------------------------------------------------- */
+    /* Progress Bar */
+    .progress-bar-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: rgba(255, 255, 255, 0.05);
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 10%;
+      background: linear-gradient(to right, var(--color-purple), var(--color-blue));
+      transition: width 0.3s ease;
+    }
+
+    /* Dots indicator */
+    .indicator-dots {
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .dot.active {
+      background-color: var(--color-purple);
+      transform: scale(1.2);
+      box-shadow: 0 0 8px var(--color-purple);
+    }
+
+    .dot.light-theme {
+      background-color: rgba(0, 0, 0, 0.15);
+      border-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .dot.light-theme.active {
+      background-color: var(--color-purple);
+    }
+
+    /* Floating navigation HUD */
+    .nav-hud {
+      position: absolute;
+      bottom: 20px;
+      right: 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background-color: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 18px;
+      border-radius: 30px;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-hud.light-theme {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: #FFFFFF;
+      font-size: 1.1rem;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+
+    .nav-hud.light-theme .nav-btn {
+      color: var(--color-text-primary-light);
+    }
+
+    .nav-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--color-purple);
+    }
+
+    .nav-hud.light-theme .nav-btn:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .slide-number {
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-text-secondary-dark);
+      letter-spacing: 0.05em;
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .nav-hud.light-theme .slide-number {
+      color: var(--color-text-secondary-light);
+    }
+
+    /* Help Keyboard Tooltip */
+    .keyboard-help {
+      position: absolute;
+      bottom: 20px;
+      left: 40px;
+      font-size: 0.725rem;
+      color: var(--color-text-secondary-dark);
+      background-color: rgba(15, 23, 42, 0.5);
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .keyboard-help.light-theme {
+      color: var(--color-text-secondary-light);
+      background-color: rgba(255, 255, 255, 0.5);
+      border-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* --------------------------------------------------
+       RESPONSIVE ADJUSTMENTS
+       -------------------------------------------------- */
+    @media (max-height: 800px) {
+      .slide-title { font-size: 1.8rem; }
+      .bento-card { padding: 18px; }
+      .bento-card-title { margin-bottom: 10px; font-size: 1rem; }
+      .bento-list { gap: 8px; font-size: 0.825rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="presentation-container">
+    <!-- Progress Indicator Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Indicator Dots -->
+    <div class="indicator-dots" id="indicatorDots"></div>
+
+    <!-- Floating Navigation Controls -->
+    <div class="nav-hud" id="navHud">
+      <button class="nav-btn" onclick="prevSlide()" title="Previous (Left Arrow)">◀</button>
+      <span class="slide-number" id="slideNumber">01 / 10</span>
+      <button class="nav-btn" onclick="nextSlide()" title="Next (Right Arrow / Space)">▶</button>
+    </div>
+
+    <!-- Keyboard Help -->
+    <div class="keyboard-help" id="keyboardHelp">
+      Press <kbd>←</kbd> / <kbd>→</kbd> or <kbd>Space</kbd> to navigate slides
+    </div>
+
+    <!-- ==================================================
+         SLIDE 1: TITLE SLIDE (Light Theme)
+         ================================================== -->
+    <section class="slide slide-light active" data-theme="light">
+      <div class="title-content">
+        <h1 class="title-large">Smart Warehouse<br>Management System</h1>
+        <p class="title-subtitle">Next-Generation Inventory Control, Location Placement Coordinates, and AI-Driven Restocking Analytics</p>
+        
+        <div class="title-meta">
+          <div class="title-meta-item">
+            <strong>Prepared For</strong>
+            Executive Operations Review
+          </div>
+          <div class="title-meta-item">
+            <strong>Platform Stack</strong>
+            React 19 / Express.js / MySQL
+          </div>
+          <div class="title-meta-item">
+            <strong>Core AI Model</strong>
+            Google Gemini 2.5 Flash
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         SLIDE 2: OVERVIEW & OBJECTIVES (Light Theme, Image)
+         ================================================== -->
+    <section class="slide slide-light" data-theme="light">
+      <header class="slide-header">
+        <h2 class="slide-title">Project Overview & Objectives</h2>
+        <div class="slide-divider"></div>
+      </header>
+      <div class="slide-content">
+        <div class="col-6">
+          <div class="bento-card card-red">
+            <h3 class="bento-card-title">Operational Challenges Solved</h3>
+            <ul class="bento-list">
+              <li><strong>Zero Real-Time Counts:</strong> Inability to view consolidated inventory levels across distinct physical hubs, causing mismatches.</li>
+              <li><strong>Slow Picking Times:</strong> Lack of precise physical shelf logging slows down retrieval routes for warehouse operators.</li>
+              <li><strong>Zero Accountability:</strong> No chronological audit ledgers capturing stock transfer actions or manual inventory adjustments.</li>
+            </ul>
+          </div>
+          <div class="bento-card card-green">
+            <h3 class="bento-card-title">Intelligent Solution Benefits</h3>
+            <ul class="bento-list">
+              <li><strong>Consolidated Dashboard:</strong> Instantly inspect live balances, categories, and alerts from a single operational portal.</li>
+              <li><strong>Granular Coordinate Maps:</strong> Assign and modify specific Rack, Shelf, and Bin coordinates for efficient routing.</li>
+              <li><strong>Predictive Demand Engine:</strong> Uses sales velocity and seasonal indicators to suggest optimal procurement buy-orders.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="image-card">
+            <img src="assets/warehouse_isometric.png" alt="Futuristic Warehouse Layout illustration">
+            <span class="image-badge">Futuristic Warehouse Layout Mockup</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         SLIDE 3: CORE SYSTEM FEATURES (Light Theme, 3 Cols)
+         ================================================== -->
+    <section class="slide slide-light" data-theme="light">
+      <header class="slide-header">
+        <h2 class="slide-title">Core System Features</h2>
+        <div class="slide-divider"></div>
+      </header>
+      <div class="slide-content">
+        <div class="grid-3-col">
+          <div class="bento-card card-purple">
+            <h3 class="bento-card-title">Secure RBAC Gateway</h3>
+            <ul class="bento-list">
+              <li><strong>Role Safeguards:</strong> Differentiated dashboards and endpoints based on Admin, Manager, and Employee configurations.</li>
+              <li><strong>JWT Session Keys:</strong> Stateless validation via secure request authorization headers.</li>
+              <li><strong>bcryptjs Hashing:</strong> Strong cryptographic barriers protecting credentials.</li>
+              <li><strong>REST API Protection:</strong> Route middleware verifying role scopes on all write transactions.</li>
+            </ul>
+          </div>
+          <div class="bento-card card-blue">
+            <h3 class="bento-card-title">Shelf Location Mapping</h3>
+            <ul class="bento-list">
+              <li><strong>3D Placement Matrix:</strong> Catalog item positions by Rack identifier, Shelf level, and Bin box.</li>
+              <li><strong>Multi-Warehouse Hubs:</strong> Maintain separate inventory states for regional warehouses.</li>
+              <li><strong>Live Balances Sync:</strong> Layout maps update automatically when shipments and transfers are executed.</li>
+              <li><strong>Interactive Adjustments:</strong> Easily adjust quantities or relocate stock locations via modals.</li>
+            </ul>
+          </div>
+          <div class="bento-card card-green">
+            <h3 class="bento-card-title">Chronological Ledgers</h3>
+            <ul class="bento-list">
+              <li><strong>Audit Ledger Trail:</strong> Comprehensive log entries mapping every stock transaction.</li>
+              <li><strong>Transactional Options:</strong> Record Inbound additions, Outbound shipments, and Internal Transfers.</li>
+              <li><strong>Transfer Guarantees:</strong> Automatically deducts from source and adds to destination hubs in a single safe database sequence.</li>
+              <li><strong>Logged Notes:</strong> Force audit comments to track manual write exceptions.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         SLIDE 4: SYSTEM ARCHITECTURE (Light Theme, 2x2 Bento)
+         ================================================== -->
+    <section class="slide slide-light" data-theme="light">
+      <header class="slide-header">
+        <h2 class="slide-title">Technical Architecture & Stack</h2>
+        <div class="slide-divider"></div>
+      </header>
+      <div class="slide-content">
+        <div class="grid-2x2">
+          <div class="bento-card card-blue">
+            <h3 class="bento-card-title">Client Layer (Frontend)</h3>
+            <ul class="bento-list">
+              <li><strong>React 19 & Vite:</strong> Lightning-fast compilation and highly efficient virtual DOM updates.</li>
+              <li><strong>Context Auth:</strong> Encapsulates user profiles, login hooks, and token cookies client-side.</li>
+              <li><strong>Lucide Icons & CSS:</strong> Slick interface styled with clean CSS variables and modern vector layouts.</li>
+            </ul>
+          </div>
+          <div class="bento-card card-purple">
+            <h3 class="bento-card-title">API Server Layer (Backend)</h3>
+            <ul class="bento-list">
+              <li><strong>Node.js & Express:</strong> High-performance async server handling REST API endpoints.</li>
+              <li><strong>Modular MVC Layout:</strong> Separation of Concerns with dedicated routes, controller actions, models, and services.</li>
+              <li><strong>express-validator:</strong> Strict request sanitization validating types prior to SQL queries.</li>
+            </ul>
+          </div>
+          <div class="bento-card card-green">
+            <h3 class="bento-card-title">Database Storage (MySQL)</h3>
+            <ul class="bento-list">
+              <li><strong>Relational Integrity:</strong> Strict table relationships linked with foreign keys and cascading delete rules.</li>
+              <li><strong>Unique Indexes:</strong> Prevents dual coordinates for identical products in the same warehouse center.</li>
+              <li><strong>JSON Audit Columns:</strong> Stores state diff records natively in audit_logs for compliance.</li>
+            </ul>
+          </div>
+          <div class="bento-card card-orange">
+            <h3 class="bento-card-title">AI & Analytics Engine</h3>
+            <ul class="bento-list">
+              <li><strong>Google Gemini 2.5 Flash:</strong> Full natural language capabilities answering queries with live database context.</li>
+              <li><strong>Local NLP Rules:</strong> Automated fallback patterns resolving low-stock warnings and anomaly reports locally.</li>
+              <li><strong>Statistical Deviations:</strong> Custom math routines calculating transaction outlier spikes.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         SLIDE 5: DATABASE SCHEMA DESIGN (Light Theme, Table)
+         ================================================== -->
+    <section class="slide slide-light" data-theme="light">
+      <header class="slide-header">
+        <h2 class="slide-title">Database Schema Design</h2>
+        <div class="slide-divider"></div>
+      </header>
+      <div class="slide-content">
+        <div class="schema-table-container">
+          <table class="schema-table">
+            <thead>
+              <tr>
+                <th>Table Name</th>
+                <th>Core Attributes</th>
+                <th>Constraints</th>
+                <th>Operational Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>users</strong></td>
+                <td>id (Int), username (Varchar), email (Varchar), password (Varchar), role (Enum)</td>
+                <td><span class="badge-pk">PK</span> Unique: username, email</td>
+                <td>Manages user credentials and Role-Based Access Control (RBAC).</td>
+              </tr>
+              <tr>
+                <td><strong>audit_logs</strong></td>
+                <td>id (Int), user_id (Int), action (Varchar), entity_type (Varchar), before_value (JSON), after_value (JSON)</td>
+                <td><span class="badge-pk">PK</span> FK: user_id (Users)</td>
+                <td>Tracks change history (pre- and post-values) for all data updates.</td>
+              </tr>
+              <tr>
+                <td><strong>warehouses</strong></td>
+                <td>id (Int), name (Varchar), location (Varchar)</td>
+                <td><span class="badge-pk">PK</span></td>
+                <td>Represents physical distribution hubs housing regional inventory.</td>
+              </tr>
+              <tr>
+                <td><strong>categories</strong></td>
+                <td>id (Int), name (Varchar)</td>
+                <td><span class="badge-pk">PK</span></td>
+                <td>Logical grouping of items (e.g. Groceries, Electronics).</td>
+              </tr>
+              <tr>
+                <td><strong>items</strong></td>
+                <td>id (Int), name (Varchar), sku (Varchar), category_id (Int), price (Decimal), min_threshold (Int)</td>
+                <td><span class="badge-pk">PK</span> FK: category_id, Unique: sku</td>
+                <td>Global product catalog including minimum safety stock thresholds.</td>
+              </tr>
+              <tr>
+                <td><strong>inventory</strong></td>
+                <td>id (Int), item_id (Int), warehouse_id (Int), quantity (Int), rack, shelf, bin</td>
+                <td><span class="badge-pk">PK</span> FK: item_id, warehouse_id, Unique: (item_id, warehouse_id)</td>
+                <td>Maps current stock levels and 3D physical coordinates in warehouse bays.</td>
+              </tr>
+              <tr>
+                <td><strong>transactions</strong></td>
+                <td>id (Int), item_id (Int), warehouse_id (Int), type (Enum), quantity (Int), user_id (Int), notes (Text)</td>
+                <td><span class="badge-pk">PK</span> FKs to items, warehouses, users</td>
+                <td>Immutable chronological ledger auditing stock additions, shipments, and transfers.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         SLIDE 6: BACKEND API & CONTROLLER DESIGN (Light Theme)
+         ================================================== -->
+    <section class="slide slide-light" data-theme="light">
+      <header class="slide-header">
+        <h2 class="slide-title">Backend API & Controller Design</h2>
+        <div class="slide-divider"></div>
+      </header>
+      <div class="slide-content">
+        <div class="col-6">
+          <div class="bento-card card-purple">
+            <h3 class="bento-card-title">Core API Endpoint Architecture</h3>
+            <ul class="bento-list">
+              <li><strong>Auth Routes:</strong> Secure endpoints for registering accounts and logging in, generating JSON Web Tokens.</li>
+              <li><strong>Item Catalog:</strong> REST routes (GET, POST, PUT, DELETE) handling global product catalog entries.</li>
+              <li><strong>Physical Stocking:</strong> Location routes managing Rack/Shelf/Bin position edits and active stock lines.</li>
+              <li><strong>Logistics Ledger:</strong> Transaction execute routes processing inbound stock additions, outbound shipments, and internal transfers.</li>
+              <li><strong>AI Engine:</strong> Endpoints for automated forecasting metrics and natural language chatbot assistance.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="bento-card card-blue">
+            <h3 class="bento-card-title">MVC Transaction Controller Pattern</h3>
+            <ul class="bento-list">
+              <li><strong>Validation:</strong> express-validator middleware intercepts and sanitizes requests before sql connection queries are made.</li>
+              <li><strong>Atomic Transfers:</strong> Relational SQL transaction blocks execute warehouse stock transfers (checking source balance, subtracting units, and inserting into destination) to guarantee consistency.</li>
+              <li><strong>Compliance logging:</strong> Every write-controller automatically logs actions to the audit table, archiving the delta states.</li>
+              <li><strong>Centralized error catching:</strong> Global Express error handler isolates database crashes and feeds clean JSON back to the React UI.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         SLIDE 7: FRONTEND UI EXPERIENCE (Light Theme, 3 Cols)
+         ================================================== -->
+    <section class="slide slide-light" data-theme="light">
+      <header class="slide-header">
+        <h2 class="slide-title">Frontend UI & User Experience</h2>
+        <div class="slide-divider"></div>
+      </header>
+      <div class="slide-content">
+        <div class="grid-3-col">
+          <div class="bento-card card-blue">
+            <h3 class="bento-card-title">Interactive Dashboard</h3>
+            <ul class="bento-list">
+              <li><strong>Visual Alerts:</strong> Dynamic UI chips showing products with depleted or low stock levels compared to safety thresholds.</li>
+              <li><strong>Table Filters:</strong> Fast search box and dropdown filters to slice stock rows by SKU, warehouse center, or category.</li>
+              <li><strong>Loading States:</strong> Animated spinners and loaders indicating when background assets are syncing.</li>
+            </ul>
+          </div>
+          <div class="bento-card card-purple">
+            <h3 class="bento-card-title">Seamless Operations</h3>
+            <ul class="bento-list">
+              <li><strong>Bento Modals:</strong> Styled pop-up overlays for fast product creation and placement modifications.</li>
+              <li><strong>Transfer Balancer:</strong> Forms validate outbound and transfer numbers client-side, locking actions if quantity exceeds limits.</li>
+              <li><strong>Barcode Scanner:</strong> Simulated QR/Barcode scanner modal for quick mobile-like SKU selection.</li>
+            </ul>
+          </div>
+          <div class="bento-card card-green">
+            <h3 class="bento-card-title">AI Assistant Interface</h3>
+            <ul class="bento-list">
+              <li><strong>Embedded Panel:</strong> Operations chatbot sitting in the main sidebar layout.</li>
+              <li><strong>History Scroller:</strong> Auto-scrolling chat history displaying structured user questions and assistant answers.</li>
+              <li><strong>Quick Prompts:</strong> Clicking chip suggestions (e.g. "Low Stock Alerts") triggers instant pre-loaded data queries.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         SLIDE 8: AI-POWERED FORECASTING (Light Theme, Image)
+         ================================================== -->
+    <section class="slide slide-light" data-theme="light">
+      <header class="slide-header">
+        <h2 class="slide-title">AI-Powered Demand Forecasting</h2>
+        <div class="slide-divider"></div>
+      </header>
+      <div class="slide-content">
+        <div class="col-6">
+          <div class="bento-card card-purple">
+            <h3 class="bento-card-title">Predictive Replenishment Logic</h3>
+            <ul class="bento-list">
+              <li><strong>Sales Velocity:</strong> Calculated dynamically as total outbound unit volume divided by elapsed ledger days.</li>
+              <li><strong>Category Baselines:</strong> Automated fallback rates (e.g. Groceries: 12.5/day, Tech: 4.2/day) for new SKUs with short history.</li>
+              <li><strong>Reorder Point (ROP):</strong> Calculated as: <em>(Daily Sales Velocity * 5 Days Lead Time) + Safety Threshold</em>.</li>
+              <li><strong>Seasonal Multiplier:</strong> Dynamic demand multipliers adjusted by category (e.g. Summer bump of 1.45x for tropical fruits; Winter holiday bump of 1.30x for technology products).</li>
+            </ul>
+          </div>
+          <div class="bento-card card-green">
+            <h3 class="bento-card-title">Procurement Suggestions</h3>
+            <ul class="bento-list">
+              <li><strong>Predicted 30-Day Demand:</strong> Estimates monthly requirements by applying seasonal factors to sales velocities.</li>
+              <li><strong>Smart Buy-Orders:</strong> Recommends exact buy-order volumes using formula: <em>(Predicted Monthly Demand - Current Stock balance)</em>.</li>
+              <li><strong>Excel & PDF Exports:</strong> Compiles detailed forecast tables into CSV and print-ready PDF logs in one click.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="image-card">
+            <img src="assets/ai_dashboard_mockup.png" alt="AI Forecasting Dashboard illustration">
+            <span class="image-badge">AI Forecasting Analytics View Mockup</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         SLIDE 9: SECURITY & ANOMALY AUDITING (Light Theme)
+         ================================================== -->
+    <section class="slide slide-light" data-theme="light">
+      <header class="slide-header">
+        <h2 class="slide-title">Security & Anomaly Auditing</h2>
+        <div class="slide-divider"></div>
+      </header>
+      <div class="slide-content">
+        <div class="col-6">
+          <div class="bento-card card-purple">
+            <h3 class="bento-card-title">JSON-based Compliance Audit Logs</h3>
+            <ul class="bento-list">
+              <li><strong>Database Trigger:</strong> Every write query executing on products, inventory, or users prompts an audit trail entry.</li>
+              <li><strong>State Archiving:</strong> JSON database columns log pre- and post-values of objects for precise auditing.</li>
+              <li><strong>Operator Accountability:</strong> Captures performing user account, action type (create/update/delete), and exact timestamp.</li>
+              <li><strong>Immutability:</strong> Normal backend application routes prevent logs from being altered, guaranteeing compliance.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="bento-card card-red">
+            <h3 class="bento-card-title">Statistical Anomaly Spike Detection</h3>
+            <ul class="bento-list">
+              <li><strong>Sales Spike Logic:</strong> System computes averages and standard deviations on item outbound transaction histories.</li>
+              <li><strong>Outlier Trigger:</strong> Flags any outbound order size exceeding the historical average by 1.5+ standard deviations.</li>
+              <li><strong>Operational Safeguard:</strong> Alerts managers to potential stock shrinkage, billing errors, or fraud.</li>
+              <li><strong>Contextual AI:</strong> LLM assistant references detected anomalies to answer natural-language auditing questions.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================
+         SLIDE 10: CONCLUSION & ROADMAP (Light Theme)
+         ================================================== -->
+    <section class="slide slide-light" data-theme="light">
+      <header class="slide-header">
+        <h2 class="slide-title">Conclusion & Future Roadmap</h2>
+        <div class="slide-divider"></div>
+      </header>
+      <div class="slide-content" style="display: block;">
+        <div class="road-grid">
+          <div>
+            <h3 class="road-header road-header-purple">Key Achievements</h3>
+            <ul class="road-list road-list-purple">
+              <li>
+                <strong>Secure Inventory Hub</strong>
+                Built active RBAC gateways and cryptographic credentials.
+              </li>
+              <li>
+                <strong>Granular Floor Tracking</strong>
+                Simplified operational layouts utilizing 3D coordinate shelf locations.
+              </li>
+              <li>
+                <strong>Proactive Analytics & AI</strong>
+                Optimized restocking loops using seasonal demand velocity and standard deviation audit logs.
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="road-header road-header-blue">Future Milestones</h3>
+            <ul class="road-list road-list-blue">
+              <li>
+                <strong>IoT Sensory Networks</strong>
+                Integrate real-time humidity and temp sensors for cold warehouses.
+              </li>
+              <li>
+                <strong>Hardware Scanner Mobile Client</strong>
+                Deliver a dedicated iOS/Android scanner client utilizing hardware scanning SDKs.
+              </li>
+              <li>
+                <strong>Automated Restocking Dispatch</strong>
+                Configure vendor webhooks to forward buy-orders directly to suppliers on safety breach.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- --------------------------------------------------
+       SLIDESHOW NAVIGATION SCRIPT
+       -------------------------------------------------- -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    const slideNumber = document.getElementById('slideNumber');
+    const dotsContainer = document.getElementById('indicatorDots');
+    const navHud = document.getElementById('navHud');
+    const keyboardHelp = document.getElementById('keyboardHelp');
+    
+    let currentSlideIndex = 0;
+
+    // Generate Dots dynamically
+    slides.forEach((slide, idx) => {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      if (idx === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => {
+        goToSlide(idx);
+      });
+      dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updatePresentation() {
+      // Toggle active classes on slides
+      slides.forEach((slide, idx) => {
+        if (idx === currentSlideIndex) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      // Update Slide Number HUD
+      const formattedNum = String(currentSlideIndex + 1).padStart(2, '0');
+      const formattedTotal = String(slides.length).padStart(2, '0');
+      slideNumber.textContent = `${formattedNum} / ${formattedTotal}`;
+
+      // Update Progress Bar
+      const progressPercent = ((currentSlideIndex + 1) / slides.length) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      // Update Dots
+      dots.forEach((dot, idx) => {
+        if (idx === currentSlideIndex) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+
+      // Theme Adaptive Navigation HUD & Dots
+      const currentTheme = slides[currentSlideIndex].getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        navHud.classList.add('light-theme');
+        keyboardHelp.classList.add('light-theme');
+        dots.forEach(dot => dot.classList.add('light-theme'));
+      } else {
+        navHud.classList.remove('light-theme');
+        keyboardHelp.classList.remove('light-theme');
+        dots.forEach(dot => dot.classList.remove('light-theme'));
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlideIndex < slides.length - 1) {
+        currentSlideIndex++;
+        updatePresentation();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        updatePresentation();
+      }
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < slides.length) {
+        currentSlideIndex = index;
+        updatePresentation();
+      }
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSlide(slides.length - 1);
+      }
+    });
+
+    // Initial load sync
+    updatePresentation();
+  </script>
+</body>
+</html>
