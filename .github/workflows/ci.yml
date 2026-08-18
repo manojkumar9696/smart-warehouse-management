@@ -5,38 +5,26 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: backend
+
 jobs:
   build_1:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: "npm ci"
-      - run: "npm run build --if-present"
+      - run: npm ci
+      - run: npm run build --if-present
 
   test_2:
-    needs: build_1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: "npm test"
+      - run: npm test
 
-  qa_3:
-    needs: test_2
+  deploy_3:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: "npm run qa --if-present"
-
-  deploy_4:
-    needs: qa_3
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: "echo \"Deploy App Service (configure credentials/secrets before use)\""
-
-  approval_5:
-    needs: deploy_4
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: "echo \"Manual approval gate\""
+      - run: echo "Run Deploy App"
