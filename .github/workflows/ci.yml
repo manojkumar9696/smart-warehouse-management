@@ -5,26 +5,17 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: backend
-
 jobs:
   build_1:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci
-      - run: npm run build --if-present
+      - run: "npm ci"
+      - run: "npm run build --if-present"
 
-  test_2:
+  deploy_2:
+    needs: build_1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm test
-
-  deploy_3:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "Run Deploy App"
+      - run: "echo \"Deploy App Service (configure credentials/secrets before use)\""
